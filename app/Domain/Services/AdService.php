@@ -3,10 +3,16 @@
 namespace App\Domain\Services;
 
 use App\Domain\Models\Ad;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class AdService
 {
+    /**
+     * @var Model $model
+     */
+    protected $model = Ad::class;
+
     /**
      * @param $data
      * @param $requestQuery
@@ -14,19 +20,19 @@ class AdService
      */
     public function index($data, $requestQuery): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return Ad::forCollection()
+        return $this->model::query()->forCollection()
             ->sorted($data['sortBy'] ?? null, $data['descending'] ?? false)
-            ->paginate(10)
+            ->paginate($data['rowPerPage'] ?? 10)
             ->appends($requestQuery);
     }
 
     /**
      * @param $data
-     * @return Ad
+     * @return Model
      */
-    public function get($data): Ad
+    public function get($data): Model
     {
-        return Ad::find($data['id']);
+        return $this->model::query()->find($data['id']);
     }
 
 
@@ -37,11 +43,22 @@ class AdService
     public function store($data): array
     {
         return DB::transaction(function () use ($data) {
-            $ad = Ad::create($data);
+            $ad = $this->model::query()->create($data);
             if (isset($data['photo'])) {
                 $ad->photo()->createMany($data['photo']);
             }
             return $ad->only('id');
+        });
+    }
+
+    /**
+     * @param $data
+     * @return bool|null
+     */
+    public function delete($id): bool|null
+    {
+        return DB::transaction(function () use ($id) {
+            return $this->model::query()->find($id)->delete();
         });
     }
 }

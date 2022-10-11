@@ -3,6 +3,7 @@
 namespace App\Domain\Models;
 
 use Database\Factories\AdFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,7 +13,8 @@ class Ad extends Model
     use HasFactory;
 
     protected $with = ['preview'];
-    protected $fillable = ['name', 'description', 'price', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'description', 'price'];
+
 
     /**
      * @return AdFactory
@@ -20,6 +22,15 @@ class Ad extends Model
     protected static function newFactory(): AdFactory
     {
         return AdFactory::new();
+    }
+
+    /**
+     * @param DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**

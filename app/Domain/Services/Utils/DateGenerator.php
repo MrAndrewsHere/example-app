@@ -13,7 +13,9 @@ class DateGenerator
      */
     public static function step(): \Generator
     {
-        self::$current = (self::$current ?? Carbon::now()->subWeek())->copy()->addMinute();
+        self::$current = (self::$current ?? Carbon::now())->copy()->addMinute();
         yield self::$current;
     }
+
+
 }

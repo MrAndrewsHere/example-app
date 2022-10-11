@@ -5,10 +5,16 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Photo;
+use Illuminate\Console\OutputStyle;
+use Illuminate\Console\View\Components\Info;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class DatabaseSeeder extends Seeder
 {
+
     /**
      * Seed the application's database.
      *
@@ -23,10 +29,34 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Ad::factory(1000)->create()
-            ->random(500)
-            ->each(function ($ad) {
-                $ad->photo()->saveMany(Photo::factory(random_int(1, 3))->make());
-            });
+        $time = microtime(true);
+        $adCount = 10000;
+        $chunkSize = round($adCount / 2);
+
+        $ads = Ad::factory($adCount)->make();
+        $ads->chunk($chunkSize)->each(function ($chunk) {
+            DB::table('ads')->insert($chunk->toArray());
+        });
+        $photo = Ad::all()->map(function ($ad) {
+            return Photo::factory()->count(random_int(1, 3))->make(['ad_id' => $ad->id]);
+        })->flatten(1);
+
+        $photo->chunk($chunkSize)->each(function ($chunk) {
+            DB::table('photo')->insert($chunk->toArray());
+        });
+
+        $info = implode(' ', [
+            'Complete in',
+            (round(microtime(true) - $time, 1)),
+            'sec.'
+        ]);
+        (new Info(new OutputStyle(new StringInput(''), new ConsoleOutput())))
+            ->render($info);
+
+
+//        Ad::factory($adCount)->create()
+//            ->each(function ($ad) {
+//                $ad->photo()->saveMany(Photo::factory(random_int(1, 3))->make());
+//            });
     }
 }

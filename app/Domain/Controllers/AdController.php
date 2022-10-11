@@ -2,6 +2,7 @@
 
 namespace App\Domain\Controllers;
 
+use App\Domain\Requests\AdDeleteRequest;
 use App\Domain\Requests\AdGetOneRequest;
 use App\Domain\Requests\AdStoreRequest;
 use App\Domain\Requests\AdViewRequest;
@@ -32,5 +33,10 @@ class AdController extends Controller
     public function store(AdStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         return response()->json(['data' => $this->service->store($request->all())], 201);
+    }
+
+    public function delete(AdDeleteRequest $request): \Illuminate\Http\JsonResponse
+    {
+        return response()->json(['data' => $this->service->delete($request->get('id'))]);
     }
 }
