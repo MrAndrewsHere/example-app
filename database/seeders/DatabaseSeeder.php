@@ -14,7 +14,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class DatabaseSeeder extends Seeder
 {
-
+    protected $ad = Ad::class;
+    protected $photo = Photo::class;
     /**
      * Seed the application's database.
      *
@@ -33,12 +34,12 @@ class DatabaseSeeder extends Seeder
         $adCount = 10000;
         $chunkSize = round($adCount / 2);
 
-        $ads = Ad::factory($adCount)->make();
+        $ads = $this->ad::factory($adCount)->make();
         $ads->chunk($chunkSize)->each(function ($chunk) {
             DB::table('ads')->insert($chunk->toArray());
         });
-        $photo = Ad::all()->map(function ($ad) {
-            return Photo::factory()->count(random_int(1, 3))->make(['ad_id' => $ad->id]);
+        $photo = $this->ad::all()->map(function ($ad) {
+            return $this->photo::factory()->count(random_int(1, 3))->make(['ad_id' => $ad->id]);
         })->flatten(1);
 
         $photo->chunk($chunkSize)->each(function ($chunk) {

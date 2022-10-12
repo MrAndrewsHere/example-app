@@ -12,12 +12,13 @@ class APITest extends TestCase
     use RefreshDatabase;
 
     private $routePrefix = '/api/v1/';
+    private  $ad = Ad::class;
 
     /** @test */
     public function test_can_view_paginated_ads()
     {
         $count = 31;
-        $ads = Ad::factory($count)->create()->each(function ($ad) {
+        $ads = $this->ad::factory($count)->create()->each(function ($ad) {
             $ad->photo()->saveMany(Photo::factory(random_int(1, 3))->make());
         });
 
@@ -61,7 +62,7 @@ class APITest extends TestCase
     /** @test */
     public function can_get_one_ad()
     {
-        $ad = Ad::factory()->create();
+        $ad = $this->ad::factory()->create();
         $default = ['id', 'preview', 'name', 'price'];
         $optional = ['description', 'photo'];
         $response = $this->getJson(
@@ -80,7 +81,7 @@ class APITest extends TestCase
     /**test */
     public function test_can_store_ad()
     {
-        $ad = Ad::factory()->make();
+        $ad = $this->ad::factory()->make();
         $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray()));
         $response->assertCreated();
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);
@@ -90,7 +91,7 @@ class APITest extends TestCase
     /**test */
     public function test_can_store_ad_with_photo()
     {
-        $ad = Ad::factory()->make();
+        $ad = $this->ad::factory()->make();
         $photo = Photo::factory(random_int(1, 3))->make();
         $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray(), ['photo' => $photo->toArray()]));
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);
