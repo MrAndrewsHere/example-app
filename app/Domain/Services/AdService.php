@@ -20,7 +20,8 @@ class AdService
      */
     public function index($data, $requestQuery): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return $this->model::query()->forCollection()
+        return $this->model::query()
+            ->collectible()
             ->sorted($data['sortBy'] ?? null, $data['descending'] ?? false)
             ->paginate($data['rowPerPage'] ?? 10)
             ->appends($requestQuery);
@@ -55,10 +56,10 @@ class AdService
      * @param $data
      * @return bool|null
      */
-    public function delete($id): bool|null
+    public function delete(Model|int $ad): bool|null
     {
-        return DB::transaction(function () use ($id) {
-            return $this->model::query()->find($id)->delete();
+        return DB::transaction(function () use ($ad) {
+            return (is_int($ad) ? $this->model::query()->find($ad) : $ad)->delete();
         });
     }
 }

@@ -14,7 +14,7 @@ class APITest extends TestCase
     private $routePrefix = '/api/v1/';
 
     /** @test */
-    public function test_can_view_ads()
+    public function test_can_view_paginated_ads()
     {
         $count = 31;
         $ads = Ad::factory($count)->create()->each(function ($ad) {

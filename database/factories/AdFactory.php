@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Domain\Models\Ad;
-use App\Domain\Services\Utils\DateGenerator;
+use App\Domain\Services\Utils\DateSequence;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +21,7 @@ class AdFactory extends Factory
 
     public function definition()
     {
-        $dateTime = DateGenerator::step()->current(); //sorting created_at
+        $dateTime = DateSequence::next(); //sorting by created_at
         return [
             'name' => fake()->realText(100),
             'description' => fake()->realText(1000),

@@ -4,17 +4,17 @@ namespace App\Domain\Services\Utils;
 
 use Carbon\Carbon;
 
-class DateGenerator
+class DateSequence
 {
-    public static Carbon|null $current = null;
+    static Carbon $current;
 
     /**
-     * @return \Generator
+     * @return Carbon
      */
-    public static function step(): \Generator
+    public static function next(): Carbon
     {
         self::$current = (self::$current ?? Carbon::now())->copy()->addMinute();
-        yield self::$current;
+        return self::$current;
     }
 
 

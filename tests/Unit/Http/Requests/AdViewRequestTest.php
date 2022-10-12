@@ -17,7 +17,7 @@ class AdViewRequestTest extends RequestTest
     ];
 
     /** @test */
-    public function sortBy_filed_in_array()
+    public function validate_sortBy_in_array()
     {
         $this->assertGet('sortBy', 'test');
     }

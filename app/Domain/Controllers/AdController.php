@@ -20,21 +20,37 @@ class AdController extends Controller
     {
     }
 
-    public function index(AdViewRequest $request): AdCollection
+    /**
+     * @param AdViewRequest $request
+     * @return AdCollection
+     */
+    public function index(AdViewRequest $request)
     {
-        return new AdCollection($this->service->index($request->all(), $request->query()));
+        return AdCollection::make($this->service->index($request->all(), $request->query()));
     }
 
-    public function get(AdGetOneRequest $request): AdResource
+    /**
+     * @param AdGetOneRequest $request
+     * @return AdResource
+     */
+    public function get(AdGetOneRequest $request)
     {
-        return new AdResource($this->service->get($request->all()));
+        return AdResource::make($this->service->get($request->all()));
     }
 
+    /**
+     * @param AdStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(AdStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         return response()->json(['data' => $this->service->store($request->all())], 201);
     }
 
+    /**
+     * @param AdDeleteRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(AdDeleteRequest $request): \Illuminate\Http\JsonResponse
     {
         return response()->json(['data' => $this->service->delete($request->get('id'))]);

@@ -13,62 +13,62 @@ class AdStoreRequestTest extends RequestTest
     protected $method = 'post';
 
     /** @test */
-    public function name_filed_required()
+    public function validate_name_required()
     {
         $this->assertPost('name', null);
     }
 
     /** @test */
-    public function name_filed_max_string()
+    public function validate_name_max_length()
     {
         $this->assertPost('name', Str::random(201));
     }
 
     /** @test */
-    public function name_filed_min_string()
+    public function validate_name_min_length()
     {
         $this->assertPost('name', Str::random(4));
     }
 
     /** @test */
-    public function description_filed_max_string()
+    public function validate_description_max_length()
     {
         $this->assertPost('description', Str::random(1001));
     }
 
     /** @test */
-    public function price_filed_required()
+    public function validate_price_required()
     {
         $this->assertPost('price', null);
     }
 
     /** @test */
-    public function price_filed_numeric()
+    public function validate_price_is_numeric()
     {
         $this->assertPost('price', 's');
     }
 
 
     /** @test */
-    public function photo_filed_array()
+    public function validate_photo_is_array()
     {
         $this->assertPost('photo', '');
     }
 
     /** @test */
-    public function photo_filed_max_length()
+    public function validate_photo_array_max_length()
     {
         $this->assertPost('photo', [1, 1, 1, 1]);
     }
 
     /** @test */
-    public function photo_filed_url()
+    public function validate_photo_is_url()
     {
         $this->assertPost('photo.0.url', [['url' => 1]]);
     }
 
     /** @test */
-    public function photo_filed_url_distinct()
+    public function validate_photo_url_is_distinct()
     {
         $this->assertPost(
             'photo',

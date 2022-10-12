@@ -19,26 +19,26 @@ class AdGetOneRequestTest extends RequestTest
     ];
 
     /** @test */
-    public function id_filed_required()
+    public function validate_id_required()
     {
         $this->assertGet('id', null);
     }
 
     /** @test */
-    public function id_filed_exist()
+    public function validate_id_exist()
     {
         $this->assertGet('id', 0);
     }
 
     /** @test */
-    public function fields_filed_is_array()
+    public function validate_extra_is_array()
     {
         Arr::set($this->data, 'id', Ad::factory()->create()->id);
         $this->assertGet('fields', '');
     }
 
     /** @test */
-    public function fields_filed_in_array()
+    public function validate_extras_in_array()
     {
         Arr::set($this->data, 'id', Ad::factory()->create()->id);
         $this->assertGet('fields', ['photo', 'password'], 'fields.1');

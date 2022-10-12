@@ -13,7 +13,7 @@ class Ad extends Model
     use HasFactory;
 
     protected $with = ['preview'];
-    protected $fillable = ['name', 'description', 'price'];
+    protected $fillable = ['name', 'description', 'price','created_at','updated_at'];
 
 
     /**
@@ -34,26 +34,10 @@ class Ad extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function preview(): \Illuminate\Database\Eloquent\Relations\HasOne
-    {
-        return $this->hasOne(Photo::class, 'ad_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function photo(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Photo::class, 'ad_id', 'id');
-    }
-
-    /**
      * @param Builder $query
      * @return Builder
      */
-    public function scopeForCollection(Builder $query): Builder
+    public function scopeCollectible(Builder $query): Builder
     {
         return $query->select('id', 'name', 'price');
     }
@@ -70,5 +54,21 @@ class Ad extends Model
             return $query;
         }
         return $query->orderBy($sortBy, $descending ? 'desc' : 'asc');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function preview(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Photo::class, 'ad_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photo(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Photo::class, 'ad_id', 'id');
     }
 }
