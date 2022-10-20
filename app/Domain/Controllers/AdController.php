@@ -4,6 +4,8 @@ namespace App\Domain\Controllers;
 
 use App\Domain\DataTransferObjects\AdDTO;
 use App\Domain\DataTransferObjects\AdsViewDTO;
+use App\Domain\Models\Ad;
+use App\Domain\Models\Category;
 use App\Domain\Requests\AdDeleteRequest;
 use App\Domain\Requests\AdGetOneRequest;
 use App\Domain\Requests\AdStoreRequest;
@@ -28,13 +30,17 @@ class AdController extends Controller
 
     public function index(AdViewRequest $request)
     {
+
+
+        $ads = AdCollection::make($this->service->index(AdsViewDTO::fromRequest($request)));
+        if ($request->wantsJson()) {
+            return $ads;
+        }
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
-            'ads' => AdCollection::make($this->service->index(AdsViewDTO::fromRequest($request)))
+            'ads' => $ads
         ]);
-
-
     }
 
     /**

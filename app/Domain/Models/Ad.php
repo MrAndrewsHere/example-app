@@ -52,7 +52,6 @@ class Ad extends Model
     }
 
 
-
     /**
      * @param Builder $query
      * @param string|null $sortBy
@@ -69,7 +68,7 @@ class Ad extends Model
 
     public function scopeCategory(Builder $query, Category|string|null $category): Builder
     {
-        if (is_null($category)) {
+        if(is_null($category)){
             return $query;
         }
         $category = is_string($category) ? $category : $category->name;

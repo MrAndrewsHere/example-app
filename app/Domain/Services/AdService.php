@@ -21,13 +21,11 @@ class AdService
      */
     public function index(AdsViewDTO $DTO): mixed
     {
-        //TODO изменеить
-        return $builder = $this->model::query()->with('category')->category($DTO->category)->sorted($DTO->sortBy, $DTO->descending)->paginate($DTO->rowPerPage)->appends($DTO->requestQuery);
-
-        if ($DTO->category) {
-            $builder->get()->map->setRelation('category', $DTO->category);
-        }
-        return $builder->paginate($DTO->rowPerPage)->appends($DTO->requestQuery);
+        return $this->model::query()->with(['category'])
+            ->category($DTO->category)
+            ->sorted($DTO->sortBy, $DTO->descending)
+            ->paginate($DTO->rowPerPage)
+            ->appends($DTO->requestQuery);
     }
 
     /**

@@ -28,8 +28,7 @@ class AdFactory extends Factory
             'description' => fake()->realText(1000),
             'price' => random_int(50000, 2000000),
             'created_at' => $dateTime,
-            'updated_at' => $dateTime,
-            'category_id' => Category::factory()
+            'updated_at' => $dateTime
         ];
     }
 }
