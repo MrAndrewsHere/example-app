@@ -6,6 +6,20 @@
 
 
 ```bash
+composer install
+npm install
+php artisan migrate --evn=development
+php artisan db:seed --evn=development
+php artisan serve --evn=development
+'sqlite'
+```
+or
+
+```bash
+vendor/bin/sail composer install
+vendor/bin/sail npm install
+vendor/bin/sail artisan migrate
+vendor/bin/sail artisan db:seed
 vendor/bin/sail up -d
 ```
 
