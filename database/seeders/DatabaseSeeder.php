@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Domain\Models\Ad;
+use App\Domain\Models\Category;
 use App\Domain\Models\Photo;
+
 use Illuminate\Console\OutputStyle;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Database\Seeder;
@@ -14,8 +16,10 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class DatabaseSeeder extends Seeder
 {
-    protected $ad = Ad::class;
-    protected $photo = Photo::class;
+    protected $adModel = Ad::class;
+    protected $photoModel = Photo::class;
+    protected $categoryModel = Category::class;
+
     /**
      * Seed the application's database.
      *
@@ -31,15 +35,19 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $time = microtime(true);
-        $adCount = 10000;
+        $adCount = 2000;
         $chunkSize = round($adCount / 2);
 
-        $ads = $this->ad::factory($adCount)->make();
+        $categories = $this->categoryModel::factory(10)->create();
+        $ads = $this->adModel::factory($adCount)->make()->map(function ($i) use ($categories){
+            $i['category_id'] = $categories->random(1)->first()->id;
+            return $i;
+        });
         $ads->chunk($chunkSize)->each(function ($chunk) {
             DB::table('ads')->insert($chunk->toArray());
         });
-        $photo = $this->ad::all()->map(function ($ad) {
-            return $this->photo::factory()->count(random_int(1, 3))->make(['ad_id' => $ad->id]);
+        $photo = $this->adModel::all()->map(function ($ad) {
+            return $this->photoModel::factory()->count(random_int(1, 3))->make(['ad_id' => $ad->id]);
         })->flatten(1);
 
         $photo->chunk($chunkSize)->each(function ($chunk) {

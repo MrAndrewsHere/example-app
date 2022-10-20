@@ -2,19 +2,32 @@
 
 namespace App\Domain\Models;
 
+
 use Database\Factories\AdFactory;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notifiable;
 
 class Ad extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     protected $with = ['preview'];
-    protected $fillable = ['name', 'description', 'price','created_at','updated_at'];
+    protected $fillable = ['name', 'description', 'price', 'category_id', 'created_at', 'updated_at'];
 
+
+    public function getPriceAttribute(): float|int
+    {
+        return round($this->attributes['price'] / 1000, 2);
+    }
+
+    public function setPriceAttribute($value)
+    {
+        $this->attributes['price'] = $value * 1000;
+    }
 
     /**
      * @return AdFactory
@@ -22,6 +35,11 @@ class Ad extends Model
     protected static function newFactory(): AdFactory
     {
         return AdFactory::new();
+    }
+
+    public function category(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
     /**
@@ -33,14 +51,7 @@ class Ad extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopeCollectible(Builder $query): Builder
-    {
-        return $query->select('id', 'name', 'price');
-    }
+
 
     /**
      * @param Builder $query
@@ -54,6 +65,17 @@ class Ad extends Model
             return $query;
         }
         return $query->orderBy($sortBy, $descending ? 'desc' : 'asc');
+    }
+
+    public function scopeCategory(Builder $query, Category|string|null $category): Builder
+    {
+        if (is_null($category)) {
+            return $query;
+        }
+        $category = is_string($category) ? $category : $category->name;
+        return $query->whereHas('category', function (Builder $query) use ($category) {
+            return $query->where('name', $category);
+        });
     }
 
     /**

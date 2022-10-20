@@ -3,6 +3,8 @@
 namespace App\Domain\Services;
 
 use App\Domain\Models\Ad;
+use App\Domain\DataTransferObjects\AdDTO;
+use App\Domain\DataTransferObjects\AdsViewDTO;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -14,17 +16,18 @@ class AdService
     protected $model = Ad::class;
 
     /**
-     * @param $data
-     * @param $requestQuery
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param AdsViewDTO $DTO
+     * @return mixed
      */
-    public function index($data, $requestQuery): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function index(AdsViewDTO $DTO): mixed
     {
-        return $this->model::query()
-            ->collectible()
-            ->sorted($data['sortBy'] ?? null, $data['descending'] ?? false)
-            ->paginate($data['rowPerPage'] ?? 10)
-            ->appends($requestQuery);
+        //TODO изменеить
+        return $builder = $this->model::query()->with('category')->category($DTO->category)->sorted($DTO->sortBy, $DTO->descending)->paginate($DTO->rowPerPage)->appends($DTO->requestQuery);
+
+        if ($DTO->category) {
+            $builder->get()->map->setRelation('category', $DTO->category);
+        }
+        return $builder->paginate($DTO->rowPerPage)->appends($DTO->requestQuery);
     }
 
     /**
@@ -38,22 +41,27 @@ class AdService
 
 
     /**
-     * @param $data
+     * @param AdDTO $DTO
      * @return array
      */
-    public function store($data): array
+    public function store(AdDTO $DTO): array
     {
-        return DB::transaction(function () use ($data) {
-            $ad = $this->model::query()->create($data);
-            if (isset($data['photo'])) {
-                $ad->photo()->createMany($data['photo']);
+        return DB::transaction(function () use ($DTO) {
+            $ad = $this->model::query()->create([
+                'name' => $DTO->name,
+                'description' => $DTO->description,
+                'price' => $DTO->price,
+                'category_id' => $DTO->category->id
+            ]);
+            if ($DTO->photos) {
+                $ad->photo()->createMany($DTO->photos->toArray());
             }
             return $ad->only('id');
         });
     }
 
     /**
-     * @param $data
+     * @param Model|int $ad
      * @return bool|null
      */
     public function delete(Model|int $ad): bool|null

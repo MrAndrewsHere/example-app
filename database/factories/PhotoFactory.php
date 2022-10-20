@@ -20,7 +20,7 @@ class PhotoFactory extends Factory
     public function definition()
     {
         return [
-            'url' => "https://picsum.photos/id/" . random_int(1, 1000) . "/1900/1260"
+            'url' => "https://via.placeholder.com/150?text=example-app"
         ];
     }
 }

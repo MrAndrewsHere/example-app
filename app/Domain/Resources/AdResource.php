@@ -20,6 +20,7 @@ class AdResource extends JsonResource
             'name' => $this->name,
             'preview' => new PhotoResource($this->preview),
             'price' => $this->price,
+            'category' => $this->category,
             'description' => $this->when(in_array('description', $extra), $this->description),
             'photo' => $this->when(in_array('photo', $extra), PhotoResource::collection($this->photo)),
             'created_at' => $this->created_at

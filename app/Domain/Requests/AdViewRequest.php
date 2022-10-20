@@ -27,14 +27,9 @@ class AdViewRequest extends FormRequest
         return [
             'sortBy' => [Rule::in(['price', 'created_at'])],
             'descending' => ['nullable','boolean'],
-            'rowPerPage' => ['nullable','integer','min:5']
+            'rowPerPage' => ['nullable','integer','min:5'],
+            'category' => ['nullable','string']
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'descending' => (bool)$this->descending
-        ]);
-    }
 }

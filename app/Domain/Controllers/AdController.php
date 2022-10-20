@@ -2,6 +2,8 @@
 
 namespace App\Domain\Controllers;
 
+use App\Domain\DataTransferObjects\AdDTO;
+use App\Domain\DataTransferObjects\AdsViewDTO;
 use App\Domain\Requests\AdDeleteRequest;
 use App\Domain\Requests\AdGetOneRequest;
 use App\Domain\Requests\AdStoreRequest;
@@ -10,6 +12,10 @@ use App\Domain\Resources\AdCollection;
 use App\Domain\Resources\AdResource;
 use App\Domain\Services\AdService;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AdController extends Controller
 {
@@ -20,13 +26,15 @@ class AdController extends Controller
     {
     }
 
-    /**
-     * @param AdViewRequest $request
-     * @return AdCollection
-     */
     public function index(AdViewRequest $request)
     {
-        return AdCollection::make($this->service->index($request->all(), $request->query()));
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'ads' => AdCollection::make($this->service->index(AdsViewDTO::fromRequest($request)))
+        ]);
+
+
     }
 
     /**
@@ -44,7 +52,7 @@ class AdController extends Controller
      */
     public function store(AdStoreRequest $request): \Illuminate\Http\JsonResponse
     {
-        return response()->json(['data' => $this->service->store($request->all())], 201);
+        return response()->json(['data' => $this->service->store(AdDTO::fromRequest($request))], 201);
     }
 
     /**

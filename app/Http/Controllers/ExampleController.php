@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Arr;
+use App\Jobs\ExampleJob;
 
 class ExampleController extends Controller
 {
     public function __invoke()
     {
-        return response()->json();
+
+        return response()->json([
+            'code' => 200,
+            'message' => 'SUCCESS'
+        ]);
     }
 }

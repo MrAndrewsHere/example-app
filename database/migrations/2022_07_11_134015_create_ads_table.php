@@ -14,6 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('name', '200');
             $table->string('description', '1000')->nullable();
             $table->unsignedInteger('price');

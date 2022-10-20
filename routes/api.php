@@ -18,7 +18,7 @@ Route::get('/test',ExampleController::class);
 Route::prefix('/v1')->group(function () {
     Route::get('/', fn() => app()->version());
 
-    Route::get('/ads', [AdController::class, 'index']);
+    Route::get('/ads', [AdController::class, 'index'])->name('ads');
     Route::get('/ad', [AdController::class, 'get']);
     Route::post('/ad', [AdController::class, 'store']);
 });

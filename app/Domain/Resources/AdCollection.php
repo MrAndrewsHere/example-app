@@ -2,6 +2,7 @@
 
 namespace App\Domain\Resources;
 
+use App\Domain\Models\Category;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class AdCollection extends ResourceCollection
@@ -15,5 +16,12 @@ class AdCollection extends ResourceCollection
     public function toArray($request)
     {
         return parent::toArray($request);
+    }
+
+    public function with($request)
+    {
+        return [
+            'categories' => Category::all()->toArray()
+        ];
     }
 }

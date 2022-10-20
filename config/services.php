@@ -30,5 +30,8 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'telegram-bot-api' => [
+        'token' => '5727019615:AAHA4dBDksA084G-DoYPY2tpXKSsgtOWAro'
+    ],
 
 ];

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Domain\Models\Ad;
+use App\Domain\Models\Category;
 use App\Domain\Services\Utils\DateSequence;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,9 +26,10 @@ class AdFactory extends Factory
         return [
             'name' => fake()->realText(100),
             'description' => fake()->realText(1000),
-            'price' => random_int(50, 200000),
+            'price' => random_int(50000, 2000000),
             'created_at' => $dateTime,
             'updated_at' => $dateTime,
+            'category_id' => Category::factory()
         ];
     }
 }
