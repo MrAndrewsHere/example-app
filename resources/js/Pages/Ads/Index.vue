@@ -64,11 +64,11 @@ const reset = () => {
         </div>
     </form>
 
-    <div class="text-xs mx-6">
+    <div class="text-xs mx-3 py-3">
         Всего: {{$page.props.ads.meta.total}}
     </div>
-    <div class="grid grid-cols-3 ">
-        <div class="p-4" v-for="item in $page.props.ads.data" :key="item.id">
+    <div class="py-4 grid  grid-cols-3 ">
+        <div  v-for="item in $page.props.ads.data" :key="item.id">
             <img class="w-full aspect-video p-3" v-if="item.preview" :src="item.preview && item.preview.url">
             <slot name="name" :item="item">
                 <span class="text-sm p-3 py-1 font-bold">{{ item.name }}</span>
@@ -77,7 +77,7 @@ const reset = () => {
 
             <slot name="category" :category="item.category">
                 <div class="p-3 py-0 ">
-                <span class="text-xs ">Категория: {{ item.category.name }}</span>
+                <span class="text-xs">Категория: {{ item.category.name }}</span>
 
                 </div>
             </slot>

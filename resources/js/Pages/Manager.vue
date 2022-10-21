@@ -30,11 +30,10 @@ const create = ()=> {route('ads.create')}
                         </template>
 
                         <template #create>
-                            <SecondaryButton  :class="['mx-3']" >
-                                <InertiaLink :href="route('ads.create')" >
-                                    Создать
-                                </InertiaLink>
-                            </SecondaryButton>
+
+                            <a  :href="route('ads.create')" class=" inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm" >
+                                Создать
+                            </a>
                         </template>
                     </ads>
                 </div>

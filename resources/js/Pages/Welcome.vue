@@ -31,7 +31,7 @@ const props = defineProps({
             </template>
         </div>
 
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-5">
             <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                 <svg
                     viewBox="0 0 651 192"
