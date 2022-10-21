@@ -31,8 +31,9 @@ const reset = () => {
 </script>
 
 <template>
+    <div class="m-5">
     <form @submit.prevent="submit">
-        <div class="row justify-content-end m-5 mb-6 ">
+        <div class="row justify-content-end mb-6 ">
 
             <label class="mx-2 text-sm" for="sort">Сортировка</label>
             <select id="sort" class="text-sm" v-model="form.sortBy">
@@ -46,6 +47,7 @@ const reset = () => {
 
             <label class="mx-3 text-sm" for="category">Категория</label>
             <select id="category" class="text-sm" v-model="form.category">
+                <option :value="null"></option>
                 <option v-for="(category) in $page.props.ads.categories" :value="category.name">
                     {{ category.name }}
                 </option>
@@ -62,8 +64,11 @@ const reset = () => {
         </div>
     </form>
 
+    <div class="text-xs mx-6">
+        Всего: {{$page.props.ads.meta.total}}
+    </div>
     <div class="grid grid-cols-3 ">
-        <div class="m-4" v-for="item in $page.props.ads.data" :key="item.id">
+        <div class="p-4" v-for="item in $page.props.ads.data" :key="item.id">
             <img class="w-full aspect-video p-3" v-if="item.preview" :src="item.preview && item.preview.url">
             <slot name="name" :item="item">
                 <span class="text-sm p-3 py-1 font-bold">{{ item.name }}</span>
@@ -91,7 +96,7 @@ const reset = () => {
     </div>
 
     <pagination class="mt-6" :links="$page.props.ads.meta.links"/>
-
+    </div>
 </template>
 
 
