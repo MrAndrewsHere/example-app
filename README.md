@@ -4,15 +4,13 @@
 
 
 
-## Installationnpm r
+## Installation
 
-Install PHP dependencies:
 
 ```sh
 composer install
 ```
 
-Install NPM dependencies:
 
 ```sh
 npm install
@@ -37,6 +35,10 @@ php artisan key:generate
 ```
 
 Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration accordingly.
+
+```sh
+cp database.sqlite database
+```
 
 ```sh
 touch database/database.sqlite
