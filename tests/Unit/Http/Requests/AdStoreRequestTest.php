@@ -9,7 +9,9 @@ use Tests\RequestTest;
 class AdStoreRequestTest extends RequestTest
 {
     protected $url = '/api/v1/ad';
+
     protected $model = Ad::class;
+
     protected $method = 'post';
 
     /** @test */
@@ -47,7 +49,6 @@ class AdStoreRequestTest extends RequestTest
     {
         $this->assertPost('price', 's');
     }
-
 
     /** @test */
     public function validate_photo_is_array()

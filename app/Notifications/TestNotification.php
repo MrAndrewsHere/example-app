@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -39,7 +38,7 @@ class TestNotification extends Notification
             // Optional recipient user id.
             ->to(-886122161)
             // Markdown supported.
-            ->content("Hello there!");
+            ->content('Hello there!');
     }
 
     /**

@@ -6,18 +6,20 @@ namespace Database\Seeders;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Category;
 use App\Domain\Models\Photo;
-
 use Illuminate\Console\OutputStyle;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class DatabaseSeeder extends Seeder
 {
     protected $adModel = Ad::class;
+
     protected $photoModel = Photo::class;
+
     protected $categoryModel = Category::class;
 
     /**
@@ -29,18 +31,23 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        \App\Models\User::query()->firstOrCreate(['email' => 'test@example.com'], [
+            'name' => 'Test User',
+            'password' => Hash::make('12345678'),
+        ]);
+
+
+
 
         $time = microtime(true);
         $adCount = 2000;
         $chunkSize = round($adCount / 2);
 
         $categories = $this->categoryModel::factory(10)->create();
-        $ads = $this->adModel::factory($adCount)->make()->map(function ($i) use ($categories){
+
+        $ads = $this->adModel::factory($adCount)->make()->map(function ($i) use ($categories) {
             $i['category_id'] = $categories->random(1)->first()->id;
+
             return $i;
         });
         $ads->chunk($chunkSize)->each(function ($chunk) {
@@ -57,11 +64,10 @@ class DatabaseSeeder extends Seeder
         $info = implode(' ', [
             'Complete in',
             (round(microtime(true) - $time, 1)),
-            'sec.'
+            'sec.',
         ]);
         (new Info(new OutputStyle(new StringInput(''), new ConsoleOutput())))
             ->render($info);
-
 
 //        Ad::factory($adCount)->create()
 //            ->each(function ($ad) {

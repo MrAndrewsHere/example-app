@@ -12,10 +12,12 @@ class AdGetOneRequestTest extends RequestTest
     use BrokeValidationTrait;
 
     protected $url = '/api/v1/ad';
+
     protected $method = 'get';
+
     protected $data = [
         'id' => 1,
-        'fields' => ['photo', 'description']
+        'fields' => ['photo', 'description'],
     ];
 
     /** @test */

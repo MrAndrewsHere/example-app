@@ -11,7 +11,9 @@ class Photo extends Model
     use HasFactory;
 
     public $timestamps = false;
+
     protected $table = 'photo';
+
     protected $fillable = ['url', 'ad_id'];
 
     /**

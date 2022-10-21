@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.linker a{
+    color: dodgerblue!important;
+    text-decoration: underline!important;
+    cursor: pointer;
+}

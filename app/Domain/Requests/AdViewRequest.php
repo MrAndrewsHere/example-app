@@ -25,11 +25,10 @@ class AdViewRequest extends FormRequest
     public function rules()
     {
         return [
-            'sortBy' => [Rule::in(['price', 'created_at'])],
-            'descending' => ['nullable','boolean'],
-            'rowPerPage' => ['nullable','integer','min:5'],
-            'category' => ['nullable','string']
+            'sortBy' => ['nullable', Rule::in(['price', 'created_at'])],
+            'descending' => ['nullable', 'boolean'],
+            'rowPerPage' => ['nullable', 'integer', 'min:5'],
+            'category' => ['nullable', 'string'],
         ];
     }
-
 }

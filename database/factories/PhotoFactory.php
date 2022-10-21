@@ -20,7 +20,7 @@ class PhotoFactory extends Factory
     public function definition()
     {
         return [
-            'url' => "https://via.placeholder.com/150?text=example-app"
+            'url' => 'https://via.placeholder.com/150?text=example-app',
         ];
     }
 }

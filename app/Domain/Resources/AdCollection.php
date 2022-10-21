@@ -10,7 +10,7 @@ class AdCollection extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -21,7 +21,8 @@ class AdCollection extends ResourceCollection
     public function with($request)
     {
         return [
-            'categories' => Category::all()->toArray()
+            'categories' => Category::all()->toArray(),
+            ...$request->query,
         ];
     }
 }

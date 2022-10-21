@@ -1,9 +1,10 @@
 <?php
 
 use App\Domain\Controllers\AdController;
+use App\Http\Controllers\ExampleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ExampleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,13 +15,14 @@ use App\Http\Controllers\ExampleController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/test',ExampleController::class);
+Route::get('/test', ExampleController::class);
 Route::prefix('/v1')->group(function () {
-    Route::get('/', fn() => app()->version());
+    Route::get('/', fn () => app()->version());
 
     Route::get('/ads', [AdController::class, 'index'])->name('ads');
     Route::get('/ad', [AdController::class, 'get']);
     Route::post('/ad', [AdController::class, 'store']);
+    Route::delete('/ad/{ad}', [AdController::class, 'delete']);
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

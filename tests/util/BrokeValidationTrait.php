@@ -16,6 +16,7 @@ trait BrokeValidationTrait
         Arr::set($data, $validatedField, $brokenRule);
         $res = $this->postJson($this->url, $data);
         $res->assertJsonValidationErrors($expectedField);
+
         return $res;
     }
 
@@ -24,8 +25,9 @@ trait BrokeValidationTrait
         $expectedField = $expectedField ?? $validatedField;
         $data = $this->data;
         Arr::set($data, $validatedField, $brokenRule);
-        $res = $this->getJson($this->url . '?' . http_build_query($data));
+        $res = $this->getJson($this->url.'?'.http_build_query($data));
         $res->assertJsonValidationErrors($expectedField);
+
         return $res;
     }
 }

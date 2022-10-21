@@ -2,24 +2,25 @@
 
 namespace App\Domain\Services;
 
-use App\Domain\Models\Ad;
 use App\Domain\DataTransferObjects\AdDTO;
-use App\Domain\DataTransferObjects\AdsViewDTO;
+use App\Domain\DataTransferObjects\AdsIndexDTO;
+use App\Domain\Models\Ad;
+use App\Domain\Models\Photo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class AdService
 {
     /**
-     * @var Model $model
+     * @var Model
      */
     protected $model = Ad::class;
 
     /**
-     * @param AdsViewDTO $DTO
+     * @param AdsIndexDTO $DTO
      * @return mixed
      */
-    public function index(AdsViewDTO $DTO): mixed
+    public function index(AdsIndexDTO $DTO): mixed
     {
         return $this->model::query()->with(['category'])
             ->category($DTO->category)
@@ -30,39 +31,64 @@ class AdService
 
     /**
      * @param $data
-     * @return Model
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder[]|Model
      */
-    public function get($data): Model
+    public function get($data): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model
     {
         return $this->model::query()->find($data['id']);
     }
-
 
     /**
      * @param AdDTO $DTO
      * @return array
      */
-    public function store(AdDTO $DTO): array
+    public function store(AdDTO $DTO): Ad
     {
         return DB::transaction(function () use ($DTO) {
             $ad = $this->model::query()->create([
                 'name' => $DTO->name,
                 'description' => $DTO->description,
                 'price' => $DTO->price,
-                'category_id' => $DTO->category->id
+                'category_id' => $DTO->category->id,
             ]);
-            if ($DTO->photos) {
-                $ad->photo()->createMany($DTO->photos->toArray());
-            }
-            return $ad->only('id');
+            $ad->photo()->createMany(
+                $DTO->photos->count() ?
+                    $DTO->photos->toArray() :
+                    [Photo::factory()->make()->toArray()]);
+
+            return $ad;
         });
     }
 
     /**
-     * @param Model|int $ad
+     * @param AdDTO $DTO
+     * @return mixed
+     */
+    public function update(AdDTO $DTO): mixed
+    {
+        $ad = $this->model::query()->find($DTO->id);
+
+        return DB::transaction(function () use ($ad, $DTO) {
+            $ad->update([
+                'name' => $DTO->name,
+                'description' => $DTO->description,
+                'price' => $DTO->price,
+                'category_id' => $DTO->category->id,
+            ]);
+
+            if ($DTO->photos->count()) {
+                $ad->photo()->createMany($DTO->photos->toArray());
+            }
+
+            return $ad;
+        });
+    }
+
+    /**
+     * @param Ad|int $ad
      * @return bool|null
      */
-    public function delete(Model|int $ad): bool|null
+    public function delete(Ad|int $ad): bool|null
     {
         return DB::transaction(function () use ($ad) {
             return (is_int($ad) ? $this->model::query()->find($ad) : $ad)->delete();

@@ -3,9 +3,8 @@
 namespace App\Domain\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class AdGetOneRequest extends FormRequest
+class AdUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +24,13 @@ class AdGetOneRequest extends FormRequest
     public function rules()
     {
         return [
-            'fields' => ['array'],
-            'fields.*' => ['required_with:fields', Rule::in(['description', 'photo'])],
+            'id' => ['required', 'exists:ads,id'],
+            'name' => ['required', 'string', 'min:5', 'max:200'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'category' => ['required', 'string'],
+            'photo' => ['array', 'max:3'],
+            'photo.*.url' => ['url', 'distinct:strict'],
+            'price' => ['required', 'numeric'],
         ];
     }
 }

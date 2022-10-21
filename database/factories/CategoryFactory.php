@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-
 use App\Domain\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -11,8 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
-
     protected $model = Category::class;
+
     /**
      * Define the model's default state.
      *
@@ -21,7 +20,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->firstName
+            'name' => fake()->firstName,
         ];
     }
 }

@@ -3,8 +3,7 @@
 namespace Database\Factories;
 
 use App\Domain\Models\Ad;
-use App\Domain\Models\Category;
-use App\Domain\Services\Utils\DateSequence;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,16 +18,14 @@ class AdFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     public function definition()
     {
-        $dateTime = DateSequence::next(); //sorting by created_at
         return [
-            'name' => fake()->realText(100),
+            'name' => fake()->name(),
             'description' => fake()->realText(1000),
-            'price' => random_int(50000, 2000000),
-            'created_at' => $dateTime,
-            'updated_at' => $dateTime
+            'price' => (int) round(random_int(10000, 2000000) / 1000) * 10000,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
+use App\Domain\Controllers\AdController;
+use App\Domain\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Domain\Controllers\AdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,8 @@ use App\Domain\Controllers\AdController;
 |
 */
 
-Route::get('/', [AdController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/ad', [AdController::class, 'get']);
 
 Route::middleware([
     'auth:sanctum',
@@ -25,5 +27,13 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-//    Route::get('/manager', [AdController::class, 'index'])->name('manager');
+
+    Route::group(['prefix' => '/manager'], function () {
+        Route::get('/')->name('manager')->uses([AdController::class, 'index']);
+        Route::get('/ads/create')->name('ads.create')->uses([AdController::class, 'create']);
+        Route::get('/ads/{ad}/edit')->name('ads.edit')->uses([AdController::class, 'edit']);
+        Route::post('/ads')->name('ads.store')->uses([AdController::class, 'store']);
+        Route::put('/ads')->name('ads.update')->uses([AdController::class, 'update']);
+        Route::delete('/ads/{ad}')->name('ads.destroy')->uses([AdController::class, 'delete']);
+    });
 });

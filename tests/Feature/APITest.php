@@ -12,7 +12,8 @@ class APITest extends TestCase
     use RefreshDatabase;
 
     private $routePrefix = '/api/v1/';
-    private  $ad = Ad::class;
+
+    private $ad = Ad::class;
 
     /** @test */
     public function test_can_view_paginated_ads()
@@ -24,9 +25,9 @@ class APITest extends TestCase
 
         collect(['price', 'created_at'])
             ->crossJoin(collect([1, 0]))
-            ->map(fn($i) => array_combine(['sortBy', 'descending'], array_values($i)))
+            ->map(fn ($i) => array_combine(['sortBy', 'descending'], array_values($i)))
             ->each(function ($payload) use ($ads, $count) {
-                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, $payload['descending'])->take(10)->map(fn($i) => [
+                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, $payload['descending'])->take(10)->map(fn ($i) => [
                     'id' => $i['id'],
                     'name' => $i['name'],
                     'price' => $i['price'],
@@ -37,11 +38,10 @@ class APITest extends TestCase
                     ],
                 ]);
 
-
                 $response = $this->getJson(
                     $this->routePrefix
-                    . 'ads?'
-                    . http_build_query(
+                    .'ads?'
+                    .http_build_query(
                         $payload
                     )
                 );
@@ -54,7 +54,7 @@ class APITest extends TestCase
                         'last_page' => 4,
                         'per_page' => 10,
                         'total' => $count,
-                    ]
+                    ],
                 ]);
             });
     }
@@ -66,15 +66,15 @@ class APITest extends TestCase
         $default = ['id', 'preview', 'name', 'price'];
         $optional = ['description', 'photo'];
         $response = $this->getJson(
-            $this->routePrefix . 'ad?'
-            . http_build_query(
+            $this->routePrefix.'ad?'
+            .http_build_query(
                 array_merge($ad->only('id'), ['fields' => $optional])
             )
         );
         $answer = collect(array_merge($default, $optional));
         $response->assertOk()->assertJsonStructure(['data' => $answer->toArray()]);
         $response->assertJson([
-            'data' => ['id' => $ad->id]
+            'data' => ['id' => $ad->id],
         ]);
     }
 
@@ -82,7 +82,7 @@ class APITest extends TestCase
     public function test_can_store_ad()
     {
         $ad = $this->ad::factory()->make();
-        $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray()));
+        $response = $this->postJson($this->routePrefix.'ad', array_merge($ad->toArray()));
         $response->assertCreated();
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);
         $this->assertDatabaseHas('ads', $ad->toArray());
@@ -93,7 +93,7 @@ class APITest extends TestCase
     {
         $ad = $this->ad::factory()->make();
         $photo = Photo::factory(random_int(1, 3))->make();
-        $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray(), ['photo' => $photo->toArray()]));
+        $response = $this->postJson($this->routePrefix.'ad', array_merge($ad->toArray(), ['photo' => $photo->toArray()]));
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);
         $this->assertDatabaseHas('ads', $ad->toArray());
         $this->assertDatabaseHas('photo', $photo->first()->toArray());
