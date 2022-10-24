@@ -9,22 +9,56 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 trait TimeInfo
 {
+    /**
+     * @var float
+     */
     protected float $start;
+    protected string $message;
+    protected bool $withInput = true;
 
+    /**
+     * Start timer
+     * @return void
+     */
     public function start(): void
     {
         $this->start = microtime(true);
     }
 
-    public function end(): void
+    /**
+     * Stop timer and print info message
+     * @return void
+     */
+    public function end(): static
     {
-        $info = implode(' ', [
+        $sec = round(microtime(true) - $this->start, 1);
+        $this->message = implode(' ', [
             static::class,
             'complete in',
-            (round(microtime(true) - $this->start, 1)),
+            $sec,
             'sec',
         ]);
-        (new Info(new OutputStyle(new StringInput(''), new ConsoleOutput())))
-            ->render($info);
+        $this->printer();
+        return $this;
+    }
+
+    /**
+     * @return void
+     */
+    protected function printer(): void
+    {
+        if ($this->withInput) {
+            (new Info(new OutputStyle(new StringInput(''), new ConsoleOutput())))->render($this->message);
+        }
+    }
+
+    /**
+     * @param bool $withInput
+     * @return TimeInfo
+     */
+    public function setWithInput(bool $withInput): static
+    {
+        $this->withInput = $withInput;
+        return $this;
     }
 }

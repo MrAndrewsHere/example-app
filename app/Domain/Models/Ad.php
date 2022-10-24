@@ -18,11 +18,20 @@ class Ad extends Model
 
     protected $fillable = ['name', 'description', 'price', 'category_id'];
 
+    /**
+     * Normalize price value from db
+     * @return float|int
+     */
     public function getPriceAttribute(): float|int
     {
         return round($this->attributes['price'] / 1000);
     }
 
+    /**
+     * Cast price value to integer to store in db instead float type
+     * @param $value
+     * @return void
+     */
     public function setPriceAttribute($value)
     {
         $this->attributes['price'] = $value * 1000;
@@ -43,7 +52,7 @@ class Ad extends Model
 
 
     /**
-     * @param  DateTimeInterface  $date
+     * @param DateTimeInterface $date
      * @return string
      */
 
@@ -53,14 +62,14 @@ class Ad extends Model
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string|null  $sortBy
-     * @param  bool  $descending
+     * @param Builder $query
+     * @param string|null $sortBy
+     * @param bool $descending
      * @return Builder
      */
     public function scopeSorted(Builder $query, string $sortBy = null, bool $descending = true): Builder
     {
-        if (! $sortBy) {
+        if (!$sortBy) {
             return $query;
         }
 

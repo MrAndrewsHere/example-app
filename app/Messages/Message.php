@@ -4,24 +4,44 @@ namespace App\Messages;
 
 use Illuminate\Notifications\Notifiable;
 
-class Message implements MessageContract
+/**
+ * Notifiable message
+ */
+abstract class Message implements MessageContract
 {
     use Notifiable;
 
+    /**
+     * @var string|mixed
+     */
     protected string $app;
+
+    /**
+     * @var string|mixed
+     */
     protected string $domain;
 
+    /**
+     * @param string $message
+     */
     public function __construct(protected string $message)
     {
         $this->app = env('APP_NAME');
         $this->domain = parse_url(env('APP_URL'))['host'] ?? '';
     }
 
-    public function add(string $message)
+    /** Concat message with the string
+     * @param string $string
+     * @return void
+     */
+    public function add(string $string): void
     {
-        $this->message .= $message;
+        $this->message .= $string;
     }
 
+    /**
+     * @return string
+     */
     public function getMessage(): string
     {
         return implode("\n", [

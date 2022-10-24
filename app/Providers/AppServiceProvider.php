@@ -28,13 +28,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //При долгом выполнении sql запроса логируем его и отправляем оповещение
         if (!$this->app->isProduction()) {
             DB::listen(function (QueryExecuted $query) {
-                if ($query->time > 200) {
+                if ($query->time > env('MAX_SQL_QUERY_TTL_TO_NOTIFY',1000)) {
                     $backtrace = collect(debug_backtrace());
                     $location = $backtrace->filter(function ($trace) {
                         return isset($trace['file']) && (!str_contains($trace['file'], 'vendor') || !str_contains($trace['file'], 'seeder'));
-                    })->first(); // берем первый элемент не из каталога вендора
+                    })->first(); // берем первый элемент не из каталога вендора и не сидер
 
 
                     $bindings = implode(', ', $query->bindings);
@@ -53,7 +54,6 @@ class AppServiceProvider extends ServiceProvider
                     } catch (\Throwable $exception) {
                         Log::error($exception->getMessage());
                     }
-
 
                     Log::info($info);
                 }
