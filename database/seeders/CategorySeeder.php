@@ -9,6 +9,8 @@ class CategorySeeder extends Seeder
 {
     public function run()
     {
-        Category::factory(10)->create();
+        if (!Category::query()->count()) {
+            Category::factory(10)->create();
+        }
     }
 }

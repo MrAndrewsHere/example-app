@@ -32,7 +32,7 @@ class Ad extends Model
      * @param $value
      * @return void
      */
-    public function setPriceAttribute($value)
+    public function setPriceAttribute($value): void
     {
         $this->attributes['price'] = $value * 1000;
     }

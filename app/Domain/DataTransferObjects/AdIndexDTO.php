@@ -8,18 +8,15 @@ use App\Domain\Requests\AdIndexRequest;
 class AdIndexDTO
 {
     public function __construct(
-        public ?string $sortBy,
-        public bool $descending,
-        public ?Category $category,
-        public int $rowPerPage,
-        public array $requestQuery
-    ) {
+        public readonly ?string   $sortBy,
+        public readonly bool      $descending,
+        public readonly ?Category $category,
+        public readonly int       $rowPerPage,
+        public readonly array     $requestQuery
+    )
+    {
     }
 
-    /**
-     * @param AdIndexRequest $request
-     * @return static
-     */
     public static function fromRequest(AdIndexRequest $request): static
     {
         return new static(

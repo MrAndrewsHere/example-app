@@ -33,10 +33,10 @@ abstract class TelegramMessage implements MessageContract
     }
 
     /** Concat message with the string
-     * @param string $string
+     * @param string|null $string
      * @return void
      */
-    public function add(string $string): void
+    public function add(?string $string): void
     {
         $this->message .= $string;
     }
