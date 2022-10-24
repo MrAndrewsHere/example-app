@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class AdService
 {
     /**
-     * Work model
+     * Model
      *
      * @var Model
      */
@@ -50,7 +50,7 @@ class AdService
                 'category_id' => $DTO->category->id,
             ]);
             $ad->photo()->saveMany(
-                $DTO->photo->count() ? $DTO->photo : [Photo::factory()->make()]
+                $DTO->photo->count() ? $DTO->photo->toArray() : [Photo::factory()->make()]
             );
 
             return $ad;
@@ -76,7 +76,7 @@ class AdService
             ]);
 
             if ($DTO->photo->count()) {
-                $ad->photo()->saveMany($DTO->photo);
+                $ad->photo()->saveMany($DTO->photo->toArray());
             }
 
             return $ad;

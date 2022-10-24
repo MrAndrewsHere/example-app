@@ -6,6 +6,7 @@ use App\Domain\DataTransferObjects\AdDTO;
 use App\Domain\DataTransferObjects\AdIndexDTO;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Category;
+use App\Domain\Requests\AdDeleteRequest;
 use App\Domain\Requests\AdGetRequest;
 use App\Domain\Requests\AdStoreRequest;
 use App\Domain\Requests\AdUpdateRequest;
@@ -14,6 +15,8 @@ use App\Domain\Resources\AdCollection;
 use App\Domain\Resources\AdResource;
 use App\Domain\Services\AdService;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -43,13 +46,14 @@ class AdController extends Controller
         ]);
     }
 
+
     /**
-     * @return \Illuminate\Http\JsonResponse|Response
+     * @return JsonResponse|Response
      */
     public function create()
     {
         if (request()->wantsJson()) {
-            return \response()->json([]);
+            return response()->json([]);
         }
 
         return Inertia::render('Ads/Create', [
@@ -59,13 +63,17 @@ class AdController extends Controller
 
     /**
      * @param AdStoreRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return AdResource|RedirectResponse
      */
     public function store(AdStoreRequest $request)
     {
-        $this->service->store(AdDTO::fromRequest($request));
+        $ad = $this->service->store(AdDTO::fromRequest($request));
+        $ad = AdResource::make($ad);
+        if ($request->wantsJson()) {
+            return AdResource::make($ad);
+        }
 
-        return Redirect::route('manager');
+        return Redirect::route('manager')->with('success', true);
     }
 
     /**
@@ -77,7 +85,7 @@ class AdController extends Controller
     {
         $ad = AdResource::make($ad);
         if ($request->wantsJson()) {
-            return $ad;
+            return AdResource::make($ad);
         }
 
         return Inertia::render('Ads/Edit', [
@@ -91,17 +99,22 @@ class AdController extends Controller
      */
     public function update(AdUpdateRequest $request, Ad $ad)
     {
-        $this->service->update(AdDTO::fromRequest($request));
-        return Redirect::route('manager');
+        $ad = $this->service->update(AdDTO::fromRequest($request));
+        if ($request->wantsJson()) {
+            return AdResource::make($ad);
+        }
+        return Redirect::route('manager')->with('success', true);
     }
 
     /**
      * @param Ad $ad
      */
-    public function destroy(Ad $ad)
+    public function destroy(Ad $ad, AdDeleteRequest $request)
     {
-        $this->service->delete($ad);
-
-        return Redirect::route('manager');
+        $this->service->delete($request->get('id'));
+        if ($request->wantsJson()) {
+            return response()->json(['data' => true]);
+        }
+        return Redirect::route('manager')->with('success', true);
     }
 }
