@@ -2,12 +2,14 @@
 
 namespace App\Messages;
 
+use App\Notifications\TelegramNotification;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Notifiable message
  */
-abstract class Message implements MessageContract
+abstract class TelegramMessage implements MessageContract
 {
     use Notifiable;
 
@@ -50,5 +52,24 @@ abstract class Message implements MessageContract
             '----',
             $this->message
         ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function send(): void
+    {
+        try {
+            $this->notify(new TelegramNotification());
+
+        } catch (\Throwable $exception) {
+            Log::error($exception->getMessage());
+        }
+
+    }
+
+    public function __invoke()
+    {
+        $this->send();
     }
 }

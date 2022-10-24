@@ -5,7 +5,7 @@ namespace App\Messages;
 /**
  * Сообщение о долгом выполнении sql запроса
  */
-class SqlQueryTakeTooLongTime extends Message
+class SqlQueryTakeTooLongTime extends TelegramMessage
 {
     /**
      * @var string

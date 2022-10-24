@@ -3,7 +3,7 @@
 namespace App\Domain\Controllers;
 
 use App\Domain\DataTransferObjects\AdDTO;
-use App\Domain\DataTransferObjects\AdsIndexDTO;
+use App\Domain\DataTransferObjects\AdIndexDTO;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Category;
 use App\Domain\Requests\AdGetRequest;
@@ -33,7 +33,7 @@ class AdController extends Controller
      */
     public function index(AdIndexRequest $request)
     {
-        $ads = AdCollection::make($this->service->index(AdsIndexDTO::fromRequest($request)));
+        $ads = AdCollection::make($this->service->index(AdIndexDTO::fromRequest($request)));
         if ($request->wantsJson()) {
             return $ads;
         }

@@ -3,7 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\DataTransferObjects\AdDTO;
-use App\Domain\DataTransferObjects\AdsIndexDTO;
+use App\Domain\DataTransferObjects\AdIndexDTO;
 use App\Domain\Exceptions\AdNotFound;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Photo;
@@ -22,10 +22,10 @@ class AdService
     /**
      * Retrieve paginated rows
      *
-     * @param AdsIndexDTO $DTO
+     * @param AdIndexDTO $DTO
      * @return mixed
      */
-    public function index(AdsIndexDTO $DTO): mixed
+    public function index(AdIndexDTO $DTO): mixed
     {
         return $this->model::query()->with(['category'])
             ->category($DTO->category)

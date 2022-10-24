@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers;
 
-use App\Domain\DataTransferObjects\AdsIndexDTO;
+use App\Domain\DataTransferObjects\AdIndexDTO;
 use App\Domain\Requests\AdIndexRequest;
 use App\Domain\Resources\AdCollection;
 use App\Domain\Services\AdService;
@@ -22,7 +22,7 @@ class WelcomeController extends Controller
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
-            'ads' => AdCollection::make($service->index(AdsIndexDTO::fromRequest($request))),
+            'ads' => AdCollection::make($service->index(AdIndexDTO::fromRequest($request))),
         ]);
     }
 }

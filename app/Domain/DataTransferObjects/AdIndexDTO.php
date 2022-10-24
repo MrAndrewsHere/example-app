@@ -5,7 +5,7 @@ namespace App\Domain\DataTransferObjects;
 use App\Domain\Models\Category;
 use App\Domain\Requests\AdIndexRequest;
 
-class AdsIndexDTO
+class AdIndexDTO
 {
     public function __construct(
         public ?string $sortBy,

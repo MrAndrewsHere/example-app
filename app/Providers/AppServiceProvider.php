@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         //При долгом выполнении sql запроса логируем его и отправляем оповещение
         if (!$this->app->isProduction()) {
             DB::listen(function (QueryExecuted $query) {
-                if ($query->time > env('MAX_SQL_QUERY_TTL_TO_NOTIFY',1000)) {
+                if ($query->time > env('MAX_SQL_QUERY_TIME_BEFORE_NOTIFY', 1000)) {
                     $backtrace = collect(debug_backtrace());
                     $location = $backtrace->filter(function ($trace) {
                         return isset($trace['file']) && (!str_contains($trace['file'], 'vendor') || !str_contains($trace['file'], 'seeder'));
@@ -49,12 +49,8 @@ class AppServiceProvider extends ServiceProvider
                Line: ${location['line']}
                ------------
         ";
-                    try {
-                        (new SqlQueryTakeTooLongTime($query->time))->notify(new TelegramNotification());
-                    } catch (\Throwable $exception) {
-                        Log::error($exception->getMessage());
-                    }
 
+                    (new SqlQueryTakeTooLongTime($query->time))();
                     Log::info($info);
                 }
             });
