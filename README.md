@@ -2,61 +2,68 @@
 
 [//]: # (<p align="center"><a href="https://quasar.dev/" target="_blank"><img src="https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg" width="270"></a></p>)
 
-
-
 ## Installation
-
 
 ```sh
 composer install
 ```
 
-
 ```sh
 npm install
 ```
-
-
-```sh
-npm run dev
-```
-
 
 ```sh
 cp .env.example .env
 ```
 
-```sh
-php artisan key:generate
-```
-
-Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration accordingly.
+---
+Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration
+accordingly.
 
 ```sh
 cp database.sqlite database
 ```
+
 or
+
 ```sh
 touch database/database.sqlite
 ```
 
-Run database migrations:
+---
+
+```sh
+php artisan key:generate
+```
 
 ```sh
 php artisan migrate
 ```
 
-
-
 ```sh
 php artisan db:seed
 ```
 
-
+```sh
+npm run dev
+```
 
 ```sh
 php artisan serve
 ```
+
+---
+
+```
+test@example.com
+```
+
+```
+12345678
+```
+
+---
+
 ## About
 
 JSON API для сайта объявлений как тестовое задание.
@@ -64,8 +71,6 @@ JSON API для сайта объявлений как тестовое зада
 Сервис для хранения и подачи объявлений. Объявления хранятся в базе данных.
 
 Сервис предоставляет API, работающее поверх HTTP в формате JSON.
-
-
 
 ### 3 метода:
 
@@ -92,8 +97,6 @@ JSON API для сайта объявлений как тестовое зада
 - Возвращает ID созданного объявления и код результата (ошибка или успех)
 
 Unit тесты для backend части.
-
-[//]: # (Frontend: Quasar VueJS.)
 
 ## License
 

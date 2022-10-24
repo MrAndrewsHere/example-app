@@ -5,6 +5,7 @@ namespace App\Domain\Models;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Photo extends Model
 {
@@ -25,9 +26,9 @@ class Photo extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function ad(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function ad(): BelongsTo
     {
         return $this->belongsTo(Ad::class, 'id', 'ad_id');
     }

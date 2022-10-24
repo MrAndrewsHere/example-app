@@ -17,8 +17,6 @@ yarn-error.log
 /.idea
 /.vscode
 .fleet
-
+ray.php
 composer.lock
-# Project exclude paths
-/storage/app/
-/storage/framework/
+

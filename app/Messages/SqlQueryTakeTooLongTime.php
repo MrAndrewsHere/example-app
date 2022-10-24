@@ -5,19 +5,19 @@ namespace App\Messages;
 /**
  * Сообщение о долгом выполнении sql запроса
  */
-class SqlQueryTakeTooLongTime extends TelegramMessage
+class SqlQueryTakeTooLongTime extends TgMessage
 {
     /**
      * @var string
      */
     protected string $message = 'Долгое выполнение sql запроса';
 
-    /**
-     * @param string|int|float $time
-     */
-    public function __construct(string|int|float $time)
+    public function __construct(?string $message = null, ?string $chat_id = null, float|int|string|null $time = null)
     {
-        $this->message .= " ($time ms)";
-        parent::__construct($this->message);
+        if ($time) {
+            $this->message .= " ($time ms)";
+        }
+        parent::__construct($this->message, $chat_id);
+        $this->concat($message);
     }
 }

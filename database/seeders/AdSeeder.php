@@ -13,7 +13,7 @@ class AdSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $adCount = 2000;
 

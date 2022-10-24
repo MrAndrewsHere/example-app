@@ -11,28 +11,16 @@ use App\Domain\Requests\AdUpdateRequest;
 
 class AdDTO
 {
-    /**
-     * @param int|null $id
-     * @param string $name
-     * @param string|null $description
-     * @param SupportCollection|EloquentCollection $photo
-     * @param Category|Model $category
-     * @param int $price
-     */
     public function __construct(
-        public ?int                                 $id,
-        public string                               $name,
-        public ?string                              $description,
-        public SupportCollection|EloquentCollection $photo,
-        public Category|Model                       $category,
-        public int                                  $price
+        public readonly ?int                                 $id,
+        public readonly string                               $name,
+        public readonly ?string                              $description,
+        public readonly SupportCollection|EloquentCollection $photo,
+        public readonly Category|Model                       $category,
+        public readonly int                                  $price
     ) {
     }
 
-    /**
-     * @param AdUpdateRequest|AdStoreRequest $request
-     * @return static
-     */
     public static function fromRequest(AdUpdateRequest|AdStoreRequest $request): static
     {
         return new static(

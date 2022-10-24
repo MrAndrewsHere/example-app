@@ -13,7 +13,7 @@ class PhotoSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $ads = Ad::all();
         $photo = $ads->map(function ($ad) {

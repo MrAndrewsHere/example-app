@@ -18,6 +18,7 @@ trait TimeInfo
 
     /**
      * Start timer
+     *
      * @return void
      */
     public function start(): void
@@ -27,7 +28,8 @@ trait TimeInfo
 
     /**
      * Stop timer and print info message
-     * @return void
+     *
+     * @return TimeInfo
      */
     public function end(): static
     {
