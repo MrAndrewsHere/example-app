@@ -4,6 +4,7 @@ namespace App\Domain\Services;
 
 use App\Domain\DataTransferObjects\AdDTO;
 use App\Domain\DataTransferObjects\AdsIndexDTO;
+use App\Domain\Exceptions\AdNotFound;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Photo;
 use Illuminate\Database\Eloquent\Model;
@@ -12,11 +13,15 @@ use Illuminate\Support\Facades\DB;
 class AdService
 {
     /**
+     * Work model
+     *
      * @var Model
      */
     protected $model = Ad::class;
 
     /**
+     * Retrieve paginated rows
+     *
      * @param AdsIndexDTO $DTO
      * @return mixed
      */
@@ -30,15 +35,8 @@ class AdService
     }
 
     /**
-     * @param $data
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder[]|Model
-     */
-    public function get($data): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model
-    {
-        return $this->model::query()->find($data['id']);
-    }
-
-    /**
+     * Insert new row
+     *
      * @param AdDTO $DTO
      * @return array
      */
@@ -51,22 +49,23 @@ class AdService
                 'price' => $DTO->price,
                 'category_id' => $DTO->category->id,
             ]);
-            $ad->photo()->createMany(
-                $DTO->photos->count() ?
-                    $DTO->photos->toArray() :
-                    [Photo::factory()->make()->toArray()]);
+            $ad->photo()->saveMany(
+                $DTO->photo->count() ? $DTO->photo : [Photo::factory()->make()]
+            );
 
             return $ad;
         });
     }
 
     /**
+     * Update exists row
+     *
      * @param AdDTO $DTO
      * @return mixed
      */
     public function update(AdDTO $DTO): mixed
     {
-        $ad = $this->model::query()->find($DTO->id);
+        $ad = $this->model::find($DTO->id);
 
         return DB::transaction(function () use ($ad, $DTO) {
             $ad->update([
@@ -76,8 +75,8 @@ class AdService
                 'category_id' => $DTO->category->id,
             ]);
 
-            if ($DTO->photos->count()) {
-                $ad->photo()->createMany($DTO->photos->toArray());
+            if ($DTO->photo->count()) {
+                $ad->photo()->saveMany($DTO->photo);
             }
 
             return $ad;
@@ -85,13 +84,15 @@ class AdService
     }
 
     /**
+     * Delete row
+     *
      * @param Ad|int $ad
      * @return bool|null
      */
     public function delete(Ad|int $ad): bool|null
     {
         return DB::transaction(function () use ($ad) {
-            return (is_int($ad) ? $this->model::query()->find($ad) : $ad)->delete();
+            return (is_int($ad) ? $this->model::query()->find($ad) : $ad)?->delete() ?? throw new AdNotFound();
         });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class TestNotification extends Notification
+class TelegramNotification extends Notification
 {
     use Queueable;
 
@@ -24,7 +24,7 @@ class TestNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -35,30 +35,28 @@ class TestNotification extends Notification
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
-            // Optional recipient user id.
-            ->to(-886122161)
-            // Markdown supported.
-            ->content('Hello there!');
+            ->to(env('TELEGRAM_CHAT_ID'))
+            ->content($notifiable->getMessage());
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage())
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)

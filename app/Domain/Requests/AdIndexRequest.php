@@ -5,7 +5,7 @@ namespace App\Domain\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AdViewRequest extends FormRequest
+class AdIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

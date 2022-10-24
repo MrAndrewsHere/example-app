@@ -6,10 +6,10 @@ use App\Domain\DataTransferObjects\AdDTO;
 use App\Domain\DataTransferObjects\AdsIndexDTO;
 use App\Domain\Models\Ad;
 use App\Domain\Models\Category;
-use App\Domain\Requests\AdGetOneRequest;
+use App\Domain\Requests\AdGetRequest;
 use App\Domain\Requests\AdStoreRequest;
 use App\Domain\Requests\AdUpdateRequest;
-use App\Domain\Requests\AdViewRequest;
+use App\Domain\Requests\AdIndexRequest;
 use App\Domain\Resources\AdCollection;
 use App\Domain\Resources\AdResource;
 use App\Domain\Services\AdService;
@@ -21,17 +21,17 @@ use Inertia\Response;
 class AdController extends Controller
 {
     /**
-     * @param  AdService  $service
+     * @param AdService $service
      */
     public function __construct(protected AdService $service)
     {
     }
 
     /**
-     * @param AdViewRequest $request
+     * @param AdIndexRequest $request
      * @return AdCollection|Response
      */
-    public function index(AdViewRequest $request)
+    public function index(AdIndexRequest $request)
     {
         $ads = AdCollection::make($this->service->index(AdsIndexDTO::fromRequest($request)));
         if ($request->wantsJson()) {
@@ -44,10 +44,14 @@ class AdController extends Controller
     }
 
     /**
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse|Response
      */
     public function create()
     {
+        if (request()->wantsJson()) {
+            return \response()->json([]);
+        }
+
         return Inertia::render('Ads/Create', [
             'categories' => Category::all()->toArray(),
         ]);
@@ -65,11 +69,11 @@ class AdController extends Controller
     }
 
     /**
-     * @param  Ad  $ad
-     * @param  AdGetOneRequest  $request
+     * @param Ad $ad
+     * @param AdGetRequest $request
      * @return AdResource|Response
      */
-    public function edit(Ad $ad, AdGetOneRequest $request)
+    public function edit(AdGetRequest $request, Ad $ad)
     {
         $ad = AdResource::make($ad);
         if ($request->wantsJson()) {
@@ -83,18 +87,18 @@ class AdController extends Controller
     }
 
     /**
-     * @param  AdUpdateRequest  $request
+     * @param AdUpdateRequest $request
      */
-    public function update(AdUpdateRequest $request)
+    public function update(AdUpdateRequest $request, Ad $ad)
     {
         $this->service->update(AdDTO::fromRequest($request));
         return Redirect::route('manager');
     }
 
     /**
-     * @param  Ad  $ad
+     * @param Ad $ad
      */
-    public function delete(Ad $ad)
+    public function destroy(Ad $ad)
     {
         $this->service->delete($ad);
 

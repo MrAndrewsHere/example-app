@@ -17,7 +17,6 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [WelcomeController::class, 'index']);
-Route::get('/ad', [AdController::class, 'get']);
 
 Route::middleware([
     'auth:sanctum',
@@ -30,10 +29,6 @@ Route::middleware([
 
     Route::group(['prefix' => '/manager'], function () {
         Route::get('/')->name('manager')->uses([AdController::class, 'index']);
-        Route::get('/ads/create')->name('ads.create')->uses([AdController::class, 'create']);
-        Route::get('/ads/{ad}/edit')->name('ads.edit')->uses([AdController::class, 'edit']);
-        Route::post('/ads')->name('ads.store')->uses([AdController::class, 'store']);
-        Route::put('/ads')->name('ads.update')->uses([AdController::class, 'update']);
-        Route::delete('/ads/{ad}')->name('ads.destroy')->uses([AdController::class, 'delete']);
+        Route::resource('ads', AdController::class);
     });
 });

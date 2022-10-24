@@ -9,28 +9,26 @@ import InputError from "@/Components/InputError.vue";
 
 const props = defineProps({
     ad: Object,
-    categories:Array,
-    errors:Object
+    categories: Array,
+    errors: Object
 })
 const ad = props.ad.data
 const form = useForm({
-    id:ad.id,
+    id: ad.id,
     category: ad.category.name,
     name: ad.name,
     description: ad.description,
     price: ad.price,
 });
 
-const update = ()=>{
-    form.put(route('ads.update'),{
+const update = () => {
+    form.put(route('ads.update', form.id), {
         preserveScroll: true,
     })
 }
 
-const remove = () =>{
-    useForm({
-
-    }).delete(route('ads.destroy',ad.id))
+const remove = () => {
+    useForm({}).delete(route('ads.destroy', ad.id))
 }
 
 </script>
@@ -53,43 +51,43 @@ const remove = () =>{
                     <a class="text-blue-500 " :href="route('manager')">К списку</a>
                     </span>
 
-                    <form @submit="update">
-                    <div class="m-7">
-                        <InputLabel for="nameInput" value="Название"></InputLabel>
-                        <input  v-model="form.name"/>
-                        <InputError :message="errors.name"></InputError>
-                    </div>
+                    <form @submit.prevent="update">
+                        <div class="m-7">
+                            <InputLabel for="nameInput" value="Название"></InputLabel>
+                            <input v-model="form.name"/>
+                            <InputError :message="errors.name"></InputError>
+                        </div>
 
-                    <div class="m-7">
-                        <InputLabel for="categoryInput" value="Категория"></InputLabel>
-                        <select v-model="form.category">
-                            <option v-for="category in props.categories" :key="category.id">
-                                {{category.name}}
-                            </option>
-                        </select>
-                        <InputError :message="errors.category"></InputError>
-                    </div>
+                        <div class="m-7">
+                            <InputLabel for="categoryInput" value="Категория"></InputLabel>
+                            <select v-model="form.category">
+                                <option v-for="category in props.categories" :key="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                            <InputError :message="errors.category"></InputError>
+                        </div>
 
-                    <div class="m-7">
-                        <InputLabel for="descInput" value="Описание"></InputLabel>
-                        <textarea id="descInput" v-model="form.description"></textarea>
-                        <InputError :message="errors.description"></InputError>
-                    </div>
+                        <div class="m-7">
+                            <InputLabel for="descInput" value="Описание"></InputLabel>
+                            <textarea id="descInput" v-model="form.description"></textarea>
+                            <InputError :message="errors.description"></InputError>
+                        </div>
 
-                    <div class="m-7">
-                        <InputLabel for="priceInput" value="Стоимость (руб.)"></InputLabel>
-                        <input id="priceInput"  v-model="form.price"/>
-                        <InputError :message="errors.price"></InputError>
-                    </div>
+                        <div class="m-7">
+                            <InputLabel for="priceInput" value="Стоимость (руб.)"></InputLabel>
+                            <input id="priceInput" v-model="form.price"/>
+                            <InputError :message="errors.price"></InputError>
+                        </div>
 
-                    <div class="m-5">
-                        <span>Дата создания: {{ad.created_at}}</span>
-                    </div>
+                        <div class="m-5">
+                            <span>Дата создания: {{ ad.created_at }}</span>
+                        </div>
 
-                    <div class="m-7">
-                        <SecondaryButton type="submit">Обновить</SecondaryButton>
-                        <DangerButton @click="remove" type="button" :class="['mx-3']">Удалить</DangerButton>
-                    </div>
+                        <div class="m-7">
+                            <SecondaryButton type="submit">Обновить</SecondaryButton>
+                            <DangerButton @click="remove" type="button" :class="['mx-3']">Удалить</DangerButton>
+                        </div>
 
                     </form>
                 </div>

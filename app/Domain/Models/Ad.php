@@ -20,7 +20,7 @@ class Ad extends Model
 
     public function getPriceAttribute(): float|int
     {
-        return round($this->attributes['price'] / 1000, 1);
+        return round($this->attributes['price'] / 1000);
     }
 
     public function setPriceAttribute($value)
@@ -41,10 +41,12 @@ class Ad extends Model
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
+
     /**
      * @param  DateTimeInterface  $date
      * @return string
      */
+
     protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');

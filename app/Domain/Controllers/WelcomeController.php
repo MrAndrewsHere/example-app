@@ -3,7 +3,7 @@
 namespace App\Domain\Controllers;
 
 use App\Domain\DataTransferObjects\AdsIndexDTO;
-use App\Domain\Requests\AdViewRequest;
+use App\Domain\Requests\AdIndexRequest;
 use App\Domain\Resources\AdCollection;
 use App\Domain\Services\AdService;
 use App\Http\Controllers\Controller;
@@ -13,11 +13,11 @@ use Inertia\Inertia;
 class WelcomeController extends Controller
 {
     /**
-     * @param AdViewRequest $request
+     * @param AdIndexRequest $request
      * @param AdService $service
      * @return \Inertia\Response
      */
-    public function index(AdViewRequest $request, AdService $service): \Inertia\Response
+    public function index(AdIndexRequest $request, AdService $service): \Inertia\Response
     {
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
