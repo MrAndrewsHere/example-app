@@ -11,25 +11,14 @@
 composer install
 ```
 
-
 ```sh
 npm install
 ```
 
-
-```sh
-npm run dev
-```
-
-
 ```sh
 cp .env.example .env
 ```
-
-```sh
-php artisan key:generate
-```
-
+---
 Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration accordingly.
 
 ```sh
@@ -40,23 +29,28 @@ or
 touch database/database.sqlite
 ```
 
-Run database migrations:
+---
+
+```sh
+php artisan key:generate
+```
 
 ```sh
 php artisan migrate
 ```
 
-
-
 ```sh
 php artisan db:seed
 ```
 
-
-
 ```sh
 php artisan serve
 ```
+
+```sh
+npm run dev
+```
+
 ## About
 
 JSON API для сайта объявлений как тестовое задание.

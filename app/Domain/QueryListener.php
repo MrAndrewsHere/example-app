@@ -55,6 +55,7 @@ class QueryListener
      */
     protected function location(): mixed
     {
+
         return $this->backtrace->filter(function ($trace) {
             return isset($trace['file'])
                 && (
