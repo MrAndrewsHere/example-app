@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use App\Messages\SqlQueryTakeTooLongTime;
-use App\Notifications\TelegramNotification;
+use App\Domain\QueryListener;
+use App\Messages\TgMessage;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        //TgMessage::registerTelegramMock();
     }
 
     /**
@@ -26,33 +25,12 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //При долгом выполнении sql запроса логируем его и отправляем оповещение
         if (!$this->app->isProduction()) {
             DB::listen(function (QueryExecuted $query) {
-                if ($query->time > env('MAX_SQL_QUERY_TIME_BEFORE_NOTIFY', 1000)) {
-                    $backtrace = collect(debug_backtrace());
-                    $location = $backtrace->filter(function ($trace) {
-                        return isset($trace['file']) && (!str_contains($trace['file'], 'vendor') || !str_contains($trace['file'], 'seeder'));
-                    })->first(); // берем первый элемент не из каталога вендора и не сидер
-
-
-                    $bindings = implode(', ', $query->bindings);
-
-                    $info = "
-               ------------
-               Sql: $query->sql
-               Bindings: $bindings
-               Time: $query->time ms
-               File: ${location['file']}
-               Line: ${location['line']}
-               ------------
-        ";
-
-                    (new SqlQueryTakeTooLongTime($query->time))();
-                    Log::info($info);
-                }
+                $backtrace = debug_backtrace();
+                (new QueryListener(query: $query, backtrace: $backtrace))();
             });
         }
     }

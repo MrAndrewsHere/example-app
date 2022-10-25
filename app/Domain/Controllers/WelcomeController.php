@@ -9,15 +9,16 @@ use App\Domain\Services\AdService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WelcomeController extends Controller
 {
     /**
      * @param AdIndexRequest $request
      * @param AdService $service
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index(AdIndexRequest $request, AdService $service): \Inertia\Response
+    public function index(AdIndexRequest $request, AdService $service): Response
     {
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),

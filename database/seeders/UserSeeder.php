@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         User::query()->firstOrCreate(
             ['email' => env('USER_DEFAULT_EMAIL', 'test@example.com')],

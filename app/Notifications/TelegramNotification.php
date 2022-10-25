@@ -35,7 +35,7 @@ class TelegramNotification extends Notification
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
-            ->to(env('TELEGRAM_CHAT_ID'))
+            ->to($notifiable->getChatId())
             ->content($notifiable->getMessage());
     }
 
@@ -43,7 +43,7 @@ class TelegramNotification extends Notification
      * Get the mail representation of the notification.
      *
      * @param mixed $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {

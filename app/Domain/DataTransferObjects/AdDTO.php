@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection as SupportCollection;
 use App\Domain\Requests\AdUpdateRequest;
 
-class  AdDTO
+class AdDTO
 {
     public function __construct(
         public readonly ?int                                 $id,
@@ -18,8 +18,7 @@ class  AdDTO
         public readonly SupportCollection|EloquentCollection $photo,
         public readonly Category|Model                       $category,
         public readonly int                                  $price
-    )
-    {
+    ) {
     }
 
     public static function fromRequest(AdUpdateRequest|AdStoreRequest $request): static
@@ -28,7 +27,7 @@ class  AdDTO
             id: $request->get('id') ?? null,
             name: $request->get('name'),
             description: $request->get('description'),
-            photo: collect($request->get('photos'))->map(fn($i) => new Category(...$i)),
+            photo: collect($request->get('photos'))->map(fn ($i) => new Category(...$i)),
             category: Category::query()->firstOrCreate(['name' => $request->get('category')]),
             price: (int)$request->get('price')
         );

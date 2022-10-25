@@ -13,8 +13,7 @@ class AdIndexDTO
         public readonly ?Category $category,
         public readonly int       $rowPerPage,
         public readonly array     $requestQuery
-    )
-    {
+    ) {
     }
 
     public static function fromRequest(AdIndexRequest $request): static

@@ -34,7 +34,7 @@ class AdController extends Controller
      * @param AdIndexRequest $request
      * @return AdCollection|Response
      */
-    public function index(AdIndexRequest $request)
+    public function index(AdIndexRequest $request): Response|AdCollection
     {
         $ads = AdCollection::make($this->service->index(AdIndexDTO::fromRequest($request)));
         if ($request->wantsJson()) {
@@ -50,7 +50,7 @@ class AdController extends Controller
     /**
      * @return JsonResponse|Response
      */
-    public function create()
+    public function create(): JsonResponse|Response
     {
         if (request()->wantsJson()) {
             return response()->json([]);
@@ -65,7 +65,7 @@ class AdController extends Controller
      * @param AdStoreRequest $request
      * @return AdResource|RedirectResponse
      */
-    public function store(AdStoreRequest $request)
+    public function store(AdStoreRequest $request): AdResource|RedirectResponse
     {
         $ad = $this->service->store(AdDTO::fromRequest($request));
         $ad = AdResource::make($ad);
@@ -81,7 +81,7 @@ class AdController extends Controller
      * @param AdGetRequest $request
      * @return AdResource|Response
      */
-    public function edit(AdGetRequest $request, Ad $ad)
+    public function edit(AdGetRequest $request, Ad $ad): AdResource|Response
     {
         $ad = AdResource::make($ad);
         if ($request->wantsJson()) {
@@ -96,8 +96,10 @@ class AdController extends Controller
 
     /**
      * @param AdUpdateRequest $request
+     * @param Ad $ad
+     * @return AdResource|RedirectResponse
      */
-    public function update(AdUpdateRequest $request, Ad $ad)
+    public function update(AdUpdateRequest $request, Ad $ad): AdResource|RedirectResponse
     {
         $ad = $this->service->update(AdDTO::fromRequest($request));
         if ($request->wantsJson()) {
@@ -108,8 +110,10 @@ class AdController extends Controller
 
     /**
      * @param Ad $ad
+     * @param AdDeleteRequest $request
+     * @return JsonResponse|RedirectResponse
      */
-    public function destroy(Ad $ad, AdDeleteRequest $request)
+    public function destroy(Ad $ad, AdDeleteRequest $request): JsonResponse|RedirectResponse
     {
         $this->service->delete($request->get('id'));
         if ($request->wantsJson()) {

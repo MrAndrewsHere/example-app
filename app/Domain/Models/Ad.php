@@ -7,6 +7,8 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
 class Ad extends Model
@@ -20,6 +22,7 @@ class Ad extends Model
 
     /**
      * Normalize price value from db
+     *
      * @return float|int
      */
     public function getPriceAttribute(): float|int
@@ -29,6 +32,7 @@ class Ad extends Model
 
     /**
      * Cast price value to integer to store in db instead float type
+     *
      * @param $value
      * @return void
      */
@@ -45,13 +49,13 @@ class Ad extends Model
         return AdFactory::new();
     }
 
-    public function category(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
 
-    /**
+    /**?
      * @param DateTimeInterface $date
      * @return string
      */
@@ -89,17 +93,17 @@ class Ad extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function preview(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function preview(): HasOne
     {
         return $this->hasOne(Photo::class, 'ad_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function photo(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function photo(): HasMany
     {
         return $this->hasMany(Photo::class, 'ad_id', 'id');
     }

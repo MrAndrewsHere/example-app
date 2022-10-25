@@ -2,7 +2,9 @@
 
 namespace App\Domain\Exceptions;
 
-class AdNotFound extends \Exception
+use Exception;
+
+class AdNotFound extends Exception
 {
     /**
      * @var string

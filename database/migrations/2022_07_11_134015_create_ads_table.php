@@ -19,6 +19,7 @@ return new class () extends Migration {
             $table->string('description', '1000')->nullable();
             $table->unsignedInteger('price');
             $table->timestamps();
+            $table->index('created_at');
         });
     }
 

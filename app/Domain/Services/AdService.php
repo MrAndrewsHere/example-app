@@ -15,9 +15,9 @@ class AdService
     /**
      * Model
      *
-     * @var Model
+     * @var string|Model
      */
-    protected $model = Ad::class;
+    protected string|Model $model = Ad::class;
 
     /**
      * Retrieve paginated rows
@@ -27,7 +27,7 @@ class AdService
      */
     public function index(AdIndexDTO $DTO): mixed
     {
-        return $this->model::query()->with(['category'])
+        return $this->model::query()->with(['category','preview'])
             ->category($DTO->category)
             ->sorted($DTO->sortBy, $DTO->descending)
             ->paginate($DTO->rowPerPage)
@@ -38,7 +38,7 @@ class AdService
      * Insert new row
      *
      * @param AdDTO $DTO
-     * @return array
+     * @return Ad
      */
     public function store(AdDTO $DTO): Ad
     {
